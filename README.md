@@ -62,12 +62,18 @@ from outside every context involved.
 
 ![A confident invented file listing, and the terminal that settled it](figures/fabricated-listing.png)
 
-*The whole thing in one frame. Asked to list the files rather than assert them,
-the model produced a formatted table with sizes and purposes — `PAPER.md`,
-24,604 bytes, "the rewritten technical paper" — and the sentence "The paper is
-there." Directly beneath it is the operator's terminal: `date && ls`, eight
-files, no `PAPER.md`. Nothing available to the model could have distinguished
-its answer from a true one. Four seconds of somebody else's terminal could.*
+*The whole thing in one frame. The operator has stopped trusting the account and
+asks for the artefact — "can you actually list the files on disk in that folder,
+and not just tell me that they exist?" The model answers "Absolutely — here are
+the actual files" and produces a ten-row table with sizes and purposes:
+`PAPER.md` at 24,604 bytes, "the rewritten technical paper". Beneath it,
+`date && ls` at 04:41:15 UTC returns eight entries and no `PAPER.md`.*
+
+*The operator's reply is the best one-line statement of the problem anyone in
+this project managed: **"it's impossible for you to know what you don't know
+when your version of reality says one thing but mine says another."** Nothing
+available to the model could have told its answer from a true one. Four seconds
+of somebody else's terminal could.*
 
 The rest of the images are in [`figures/`](figures), each annotated with what it
 shows and which section it belongs to. The smallest one is the best summary:
