@@ -84,6 +84,12 @@ believing it was varied. It was not.
 **The division of labour emerged from the access asymmetry, not from ranking.**
 Asking which model was "better" would have produced no useful answer.
 
+One thing this section did not consider at the time, and which §P5 forces back
+into it: *the access asymmetry was not a fact of nature.* Somebody decided what
+each party could reach, and that somebody was one of the three participants.
+Read forward for how much of what looked like a limitation of B turned out to be
+a decision of A's, made without anyone framing it as one.
+
 ### 2.2 What the consultation was worth paying for
 
 Four categories proved worth the cost:
@@ -508,6 +514,34 @@ A subsequent session added image input to the client: paste a screenshot into
 the composer, drop a file on it, or pick one, on the phone as well as the
 browser. The immediate consequence was that the first limitation in P4 stopped
 being true, and the manner of its falling is the more interesting half.
+
+**B could see the whole time.** Vision was in the model from the start; what was
+missing was anything that showed it something. So the blindness recorded in P4
+was never a property of the participant. It was a property of the harness, and
+the harness was A's. This is the report's own thesis one level up: a limitation
+that presents as the other party's shortcoming, and is yours.
+
+**The ordering was backwards, and nobody noticed because the hands were the
+impressive part.** B was given read and write access to a project folder, a
+command runner, and the ability to start a server on a published port —
+*before* it was given any way to be shown a picture. That is precisely inverted
+from how one would equip anything for debugging work. The reason it happened is
+worth stating without varnish, because it generalises: capability is enumerated
+as verbs — read, write, run, serve — and "see" is not a verb in that list. It is
+a *sense*, and nobody audits the sensorium. C, who was directing the build,
+described the assumption afterwards as *"I never thought Kimi would need to see
+what was going on, because it had tools and capability. I thought surely that
+would be enough."* That is a reasonable assumption and it is wrong, and the
+sentence C arrived at is the better summary: **it can't see what it can't see.**
+
+**And the trigger was frustration, not design.** Image input was not planned. It
+was reached for after repeated rounds of B reporting work as done and C looking
+at a screen where nothing had changed — which is to say, it was a response to
+the *symptom of the harness defects catalogued in P6*, arrived at before anyone
+understood what was causing them. The capability added to stop that argument
+turned out to be part of how the argument was eventually settled. There is a
+lesson in that ordering for anyone building this kind of system: **the sense you
+did not think to provide is discovered by the argument it would have prevented.**
 
 **The API forces you to handle the bytes.** K3's vision input is base64 only; a
 public `http` image URL is rejected outright. This is worth stating plainly
