@@ -10,6 +10,16 @@ from the operator's chair — which is worth more than a description of them,
 because the whole difficulty was that a stale context and an invention look
 identical from there.
 
+## Redactions
+
+Solid bars in these images are deliberate, not rendering faults. Removed:
+the conversation title bar and sidebar entries, which are unrelated private
+work; and the name and service-account address of a third party's product,
+because the subject of this report is a debugging session and there is no
+reason to drag someone else's business into it. Nothing bearing on any claim
+made here has been altered — every quoted line, token count and price is the
+original pixels.
+
 ---
 
 ### `fabricated-listing.png` → §P6
@@ -88,10 +98,11 @@ The screenshot that started the useful part, pasted with one sentence: *"the
 simulation went through but it didn't wait for me to approve, and that admin
 page still looks like it's from the 90s."*
 
-The page renders in browser-default serif on white. The run-together
-"Provisioning service accountstacksherpa-bot@…" is itself evidence that the
-markup rather than merely the styling had been mangled — a detail the model
-picked up on.
+The page renders in browser-default serif on white — no stylesheet applied at
+all. One of its labels ran together with the value beside it, which is evidence
+that the markup and not merely the styling had been mangled, and a detail the
+model picked up on. That line names a third party's service and is redacted
+here, along with the conversation titles in the sidebar.
 
 The reasoning pane is the reason this image is here. It raises the f-string
 brace theory and knocks it down against a fact the situation supplied — *"that
@@ -116,7 +127,7 @@ inferences (*"the code is actually correct — it does park at
 `awaiting_review`"*). The screenshot had been a pointer, not a proof.
 
 Three minutes forty-five of work, and the green bar reports
-`http://192.168.4.101:8310/ stacksherpa-sim` as running. Nothing was listening
+`http://192.168.4.101:8310/` as running. Nothing was listening
 on it. That single bar is the defect that cost the most hours in this whole
 report.
 

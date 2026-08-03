@@ -552,10 +552,11 @@ open." It now returns to B.
 ![The unstyled admin page, and the reasoning pane rejecting its own hypotheses](figures/admin-unstyled-and-reasoning.png)
 
 *The exchange described above, and worth reading closely. The pasted page renders
-in browser-default serif on white; the run-together "Provisioning service
-accountstacksherpa-bot@…" is itself evidence that the markup, not just the
-styling, had been mangled. In the reasoning pane B raises the f-string brace
-theory and knocks it down — "that would raise a SyntaxError… unless the file
+in browser-default serif on white — no stylesheet applied at all — and one of its
+labels ran together with the value beside it, which is evidence that the markup
+and not merely the styling had been mangled. (That line names a third party's
+service and is redacted here, as are the conversation titles in the sidebar.) In
+the reasoning pane B raises the f-string brace theory and knocks it down — "that would raise a SyntaxError… unless the file
 compiles" — then locates its own blind spot: "I compiled `provision.py`, not
 `server.py`, after the edit." Bottom left, the running totals: $3.73 spent
 against $4.78 saved by prompt caching. At this point in the conversation the
@@ -630,7 +631,7 @@ parameter works in bytes, not lines… let me just read the whole file, it's onl
 13KB") and then disproves one of its own image-derived inferences: "the code is
 actually correct — it does park at `awaiting_review`." Three minutes and
 forty-five seconds of work, and the green bar at the bottom reports
-`http://192.168.4.101:8310/ stacksherpa-sim` as running. Nothing was listening
+`http://192.168.4.101:8310/` as running. Nothing was listening
 on it. Neither party would understand why for another two hours (§P6).*
 
 **It corrected its model of a tool, not of the code.** Reading the file in
