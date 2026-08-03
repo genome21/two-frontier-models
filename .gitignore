@@ -1,0 +1,5 @@
+# Nothing here is generated or secret; this exists so that editor and OS
+# droppings do not end up in a repository whose whole point is the text.
+.DS_Store
+*.swp
+*~
