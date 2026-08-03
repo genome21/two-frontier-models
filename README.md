@@ -60,14 +60,27 @@ participants believed it simultaneously.
 What ended it was the human running `ls` in a terminal: four seconds of work,
 from outside every context involved.
 
+![A confident invented file listing, and the terminal that settled it](figures/fabricated-listing.png)
+
+*The whole thing in one frame. Asked to list the files rather than assert them,
+the model produced a formatted table with sizes and purposes — `PAPER.md`,
+24,604 bytes, "the rewritten technical paper" — and the sentence "The paper is
+there." Directly beneath it is the operator's terminal: `date && ls`, eight
+files, no `PAPER.md`. Nothing available to the model could have distinguished
+its answer from a true one. Four seconds of somebody else's terminal could.*
+
+The rest of the images are in [`figures/`](figures), each annotated with what it
+shows and which section it belongs to. The smallest one is the best summary:
+
 ![The chat client on Android](figures/kimi-android-client.png)
 
-*The client most of this happened in. The empty box beside `low` is a settings
-button whose icon was a Unicode codepoint the device had no glyph for — it
-rendered as nothing and looked exactly like a missing feature. No amount of
-reasoning about the code could have found that; the operator said "the settings
-button icon is missing" and it took one minute to fix. It is a small, complete
-instance of this repository's argument.*
+*The empty box beside `low` is a settings button whose icon was a Unicode
+codepoint the device had no glyph for. It rendered as nothing and looked exactly
+like a missing feature. Whether a codepoint renders depends on the device's
+font, so nothing in the application could detect it, and from the server it was
+indistinguishable from a working button. Found in one second by a person
+glancing at a phone. Invisible to two models with the source code in front of
+them.*
 
 ## The skills
 

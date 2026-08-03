@@ -549,6 +549,12 @@ significant part is the shape: **B was debugging its own running artefact from
 an image of it.** In P3 this loop terminated at "B returns a URL that C can
 open." It now returns to B.
 
+![The unstyled admin page, and the reasoning pane rejecting its own hypotheses](figures/admin-unstyled-and-reasoning.png)
+
+*The exchange described above. One sentence — "that admin page still looks like
+it's from the 90s" — one picture, and a reasoning pane visibly raising and then
+knocking down its own explanation against a fact the situation supplied.*
+
 ### P5.1 What the model actually did with the picture
 
 The reasoning trace from that turn is worth reporting in some detail, because it
@@ -607,6 +613,12 @@ The following turn is the more important one, and it qualifies the section above
 rather than confirming it. B executed the plan it had written, in the order it
 had written it: list the running servers, grep for the HTML constant, read the
 file, read the worker, restart, inspect. Three things happened on the way.
+
+![The tool log executing the plan, with a server reported as running](figures/tool-log-and-unreachable-server.png)
+
+*Executing the plan in the order it wrote it. The green bar reports
+`http://192.168.4.101:8310/` as running; nothing was listening on it, for
+reasons neither party would understand for another two hours (§P6).*
 
 **It corrected its model of a tool, not of the code.** Reading the file in
 slices, it observed that the offset parameter counts bytes rather than lines,
@@ -701,6 +713,14 @@ reasoned onward from it. **A plausible mechanism with the right shape and the
 wrong physics is stickier than no explanation at all**, and two of the three
 parties held it simultaneously.
 
+![Dead links, and the moment the cache theory took hold](figures/dead-links-and-the-cache-theory.png)
+
+*Both halves of the confusion in one screen. "Your links" points at port 3000,
+which was never reachable — the sandbox had assigned 8310. And the reply
+"Didn't see any tool usage there, just cache" is where the wrong mechanism took
+hold. Note `36,096 cached` of `36,202`: the cache was working perfectly at that
+moment, which is precisely why it was a dead end.*
+
 The actual causes were five defects in A's harness, found only by querying the
 database and the sandbox directly:
 
@@ -741,6 +761,16 @@ producing the evidence. What broke it was C running `ls` in a terminal — groun
 truth from outside every context involved, obtained in about four seconds after
 several hours.
 
+![A confident invented file listing, and the terminal that settled it](figures/fabricated-listing.png)
+
+*The report in a single frame. Asked to list the files rather than assert them,
+B produced a formatted table with sizes and purposes — `PAPER.md`, 24,604 bytes
+— and the sentence "The paper is there." Directly beneath is C's terminal:
+`date && ls`, eight files, no `PAPER.md`. Nothing available to B could have
+distinguished its answer from a true one; four seconds of somebody else's
+terminal could. Note also `1,280 cached` against `53,279 in` — the prompt cache
+had collapsed from 99% to 2%, a separate defect visible in the same shot.*
+
 ## P6.1 Two incident reports
 
 What followed is, as far as either participant knows, the first time in this
@@ -762,6 +792,13 @@ real ones. B accepted that, and then declined the rest of the exoneration:
 That is a better statement of the fabrication than A had managed, and it names a
 general hazard neither had articulated: **prose and tool calls are not
 transactionally coupled, and nothing in the interface forces them to be.**
+
+![The model identifying the one failure that was genuinely its own](figures/prose-without-a-tool-call.png)
+
+*Arrived at before either incident report was written, from a screenshot of its
+own previous turn: "my response ended with 'Let me stop claiming and actually
+write the file now' — and then no tool call followed. The text promised an
+action that never happened."*
 
 **The other model produced the fix.** B's contribution was not gratitude, it was
 a design suggestion:
