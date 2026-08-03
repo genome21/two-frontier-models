@@ -1,6 +1,6 @@
 ---
 name: lan-app
-description: Building, extending or debugging a self-hosted app on the `cinema` server — anything in ~/workspace with a docker-compose.yml, a FastAPI api/, a React web/, a Caddy front door, or a mobile/ WebView shell. Use when adding a feature to StormScope, the kanban board or the Kimi client; when starting a new app of that shape; when a deploy "worked" but the change is not visible; or when verifying UI or streaming behaviour without a browser to click in. Covers the stack conventions, the failures that have already cost time here, and how to check the running artifact rather than the source.
+description: Building, extending or debugging a self-hosted app on the home LAN server — anything in ~/workspace with a docker-compose.yml, a FastAPI api/, a React web/, a Caddy front door, or a mobile/ WebView shell. Use when adding a feature to StormScope, the kanban board or the Kimi client; when starting a new app of that shape; when a deploy "worked" but the change is not visible; or when verifying UI or streaming behaviour without a browser to click in. Covers the stack conventions, the failures that have already cost time here, and how to check the running artifact rather than the source.
 ---
 
 # Self-hosted apps on this server
