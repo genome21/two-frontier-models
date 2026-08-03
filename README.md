@@ -90,11 +90,20 @@ them.*
 
 ## The skills
 
-`skills/lan-app` and `skills/model-client` are working notes in skill form,
-written while building the system this report describes. They are included
-because they are where the specifics live — rate-limit tiers, streaming shapes,
-sandbox containment, the Android WebView gotchas — and because a report that
-draws conclusions should show what it was drawing them from.
+Four skill files, written while building the system this report describes and
+sharpened by the failures in it. They are where the specifics live, and a report
+that draws conclusions should show what it drew them from.
+
+| Skill | What it covers |
+|---|---|
+| [`model-client`](skills/model-client) | Building a chat front end for a model whose vendor ships an API but no app. What to check about the API before writing code, streaming and reasoning display, cost and cache accounting, rate-limit tiers, images. |
+| [`agent-harness`](skills/agent-harness) | The layer underneath: giving a model tools without lying to it. Replay asymmetry, injecting live state, liveness versus reachability, round budgets, history filters, and why volatile data in a system message is expensive. |
+| [`agent-forensics`](skills/agent-forensics) | Diagnosing a model that appears to be lying, in evidence order. The `finish_reason` check that settles "did it ask, or did we drop it" in one query — and the trap of blaming the cache. |
+| [`lan-app`](skills/lan-app) | The deployment shape everything here runs on: Docker Compose, Caddy, SQLite, an Android WebView shell, LAN-only by choice. |
+
+`agent-harness` and `agent-forensics` are the two that did not exist before this
+episode. They are, respectively, how not to cause it and how to diagnose it.
+Drop any of these directories into `.claude/skills/` to use them.
 
 ## Provenance
 
