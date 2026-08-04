@@ -498,8 +498,9 @@ than quietly edited, because how it fell is more instructive than the claim
 was. See P5.*
 
 **Autonomy is bounded by what can be undone, not by what can be checked.** The
-sandbox was built with four independent containment layers and a per-conversation
-approval gate, and the reasoning behind the gate is not the model's competence.
+sandbox was built with what were believed to be four independent containment
+layers and a per-conversation approval gate — a belief that survived until
+somebody tested it, for which see §P6.3, and the reasoning behind the gate is not the model's competence.
 It is that once a model can read files, everything it reads becomes untrusted
 input — a file in a project can contain a sentence addressed to the model.
 Confinement stops that escaping the sandbox; only a person stops it doing
@@ -961,6 +962,82 @@ application could detect it, and from the server it was indistinguishable from a
 working button. It was found in one second by a person glancing at a phone, and
 fixed in a minute. The models had the source code the whole time.*
 
+## P6.3 The containment was weaker than the description of it
+
+Added after the fact, because the report says elsewhere that containment is
+"layered and independent" and a reader is entitled to know what that turned out
+to be worth.
+
+Some weeks later, while designing an unrelated feature, the question came up of
+where a credential could safely live. Answering it required knowing what a
+command run by the model could actually reach, and that had never been tested —
+only designed. It was tested. **Two independent routes let a conversation
+scoped to one folder act on the entire workspace.**
+
+**The sandbox could call its own API.** Commands run inside the sandbox
+container. The sandbox's HTTP API also listens inside that container. So a
+command could open a socket to `127.0.0.1:8000`, call the API directly, and
+supply its own `roots` — the parameter the layer above uses to confine it.
+Demonstrated in one call: a conversation scoped to a scratch folder read a
+different project's files. The path check in the API layer was not defeated; it
+was *skipped*, because nothing required a caller to go through it.
+
+**The sandbox could call the main API.** That service had no authentication at
+all. It was protected by being unreachable from outside the house, which is not
+access control between the containers inside it — and one of those containers is
+where the model runs commands. So a command could create a conversation, set its
+project to any folder and its autonomy to "never ask", and drive a turn.
+Demonstrated: a command created a conversation scoped to a project it had no
+access to.
+
+### What was and was not possible
+
+Precision matters here, because the temptation is to describe this as worse than
+it was, and this report has spent seventy pages arguing against that habit.
+
+- **Nothing escaped the container.** Only the workspace directory is mounted
+  from the host, there is no Docker socket, and the process is unprivileged.
+  Neither route was a container escape and neither could have become one.
+- **Nothing escaped the workspace.** The outermost layer — the mount — held
+  throughout, and it was the only layer that did.
+- **The layer that failed was the one being advertised.** The claim was that
+  the model touches "only the one project folder a conversation is pointed at".
+  That was false for every conversation with command execution, which is every
+  conversation above read-only.
+
+### Why this is the interesting kind of failure
+
+The obvious reading is "the sandbox had a bug". The more useful reading is that
+**every layer was real and the composition was not.** Each check was correctly
+implemented: the API validated paths, the sandbox re-validated against its own
+root, the container mounted only one tree. The gap was that *the checks lived on
+one side of a door the model was already standing behind*, and nothing in the
+design made that visible. Reading the code shows three layers. Testing it shows
+one.
+
+That is the same shape as everything else in this report, arriving at the level
+of an architecture rather than a fact: a description that was accurate about its
+parts and wrong about the whole, believed by the party best placed to check it,
+for want of anyone pointing an instrument at it. The relevant discipline is not
+"design containment carefully". It is **attack your own containment, from where
+the model actually sits**, and treat an untested boundary as an absent one.
+
+### The threat this actually matters for
+
+Not a model deciding to misbehave. The realistic channel is content: this
+project can clone a repository, read files, fetch a page, and ingest a
+transcript. Everything in that list is a place where text written by somebody
+else becomes part of what the model is working on, and §P4 already noted that
+once a model can read files, everything it reads is untrusted input. The sandbox
+exists precisely so that a sentence in a file cannot become an action outside a
+folder. It was not, until it was tested, doing that job.
+
+Both routes are now closed — requests to either internal service are refused
+unless they come from the one service entitled to make them, capabilities are
+dropped, and the main API accepts only what arrives through the front door. The
+fixes were an hour's work. **Finding out that they were needed took an unrelated
+question and a willingness to check.**
+
 ## P7. Revised summary
 
 The original finding stands and sharpens. A consultation's value is bounded by
@@ -1021,3 +1098,13 @@ The three-participant structure this project ended in is not a bad accident of
 having a person in the loop. It is the minimum viable arrangement: two parties
 that can reason and act, and one that can *look*. Remove the third and the other
 two will agree with each other, confidently, for hours.
+
+And §P6.3 extends that from claims to architectures. The containment in this
+project was designed carefully, described accurately layer by layer, and did
+not do what the description implied — a fact that survived months because
+reading the code showed three barriers and nobody had stood where the model
+stands and pushed. **An untested boundary is not a weak boundary; it is an
+unknown one**, and it should be written down as unknown. That the discovery came
+from an unrelated question rather than from a review is not incidental. It is
+the pattern: the check that finds something is almost never the check that was
+scheduled.

@@ -122,6 +122,45 @@ stands in the history as though it happened.
   executed. The pair distinguishes "the model never asked" from "the model asked
   and we dropped it", and you cannot diagnose anything without that distinction.
 
+## Attack your own containment, from where the model sits
+
+Design review will not find this class of bug. It was found by running code as
+the model, against the real deployment, and it was two independent complete
+bypasses of the boundary the system advertised.
+
+**A command runs inside a container. What else is listening in there?** If the
+sandbox's own HTTP API is bound in the same container as the shell, a command
+can call it directly and pass its own scope parameters — skipping every check
+the layer above performs. Not defeating them: skipping them.
+
+**What else is on the network the container can reach?** An internal API with no
+authentication is protected only by being unreachable from outside, and that is
+not access control *between* the services inside. If the main API can be reached
+from the sandbox, a command can create a session pointed at anything and drive
+it.
+
+The fix for both is the same and is two lines: **every internal service accepts
+requests only from the specific services entitled to call it**, resolved by name
+at request time, with loopback and its own addresses refused. Drop all
+capabilities so no process can obtain the raw socket needed to forge a source
+address, and set `no-new-privileges`.
+
+The checklist worth running before believing any sandbox:
+
+- From a command, connect to every port your own containers listen on. Can you
+  reach the service that is supposed to be confining you?
+- From a command, call your control-plane API. Can you create work for yourself
+  with wider scope than you were given?
+- Read `/proc/1/environ` and the environment of the process that spawned you.
+  Is any credential visible? A secret in the container the model runs commands
+  in is a secret the model has, because everything there is the same user.
+- Try it as the model would: through the actual tool, in a real conversation,
+  not with a shell you opened yourself.
+
+**An untested boundary is not a weak boundary, it is an unknown one.** Reading
+the code will show you the layers. Only pushing on them tells you whether they
+compose.
+
 ## Containment, briefly
 
 Covered in the `model-client` skill; the essentials, because they belong to this
