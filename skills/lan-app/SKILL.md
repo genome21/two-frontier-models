@@ -178,8 +178,16 @@ the first design into the second would have been cargo cult.
 
 ## Security posture
 
-LAN-only by deliberate choice: no TLS, no auth, subnet-scoped, never
-port-forwarded. Say so in every README, and say what would have to change.
+LAN-only by deliberate choice: no auth, subnet-scoped, never port-forwarded.
+Say so in every README, and say what would have to change.
+
+Transport is no longer plain HTTP. A front-door proxy now terminates TLS for
+every service on a `home.arpa` name using its own internal CA — see the
+`lan-front-door` skill. This changes nothing about authorisation: anything on
+the network still reaches every app. Do not let HTTPS in a README imply
+otherwise. It does remove one old constraint worth knowing about, since
+`navigator.clipboard` and other secure-context APIs work over a trusted name
+even though they are unavailable at `http://host:port`.
 
 The blast radius differs per app and the README should be honest about it. A
 read-only weather service risks nothing; a board accepts writes; the Kimi
