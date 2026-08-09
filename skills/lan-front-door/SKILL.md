@@ -128,6 +128,28 @@ runtime is worth more to an attacker than any app behind it.
 with `--restart unless-stopped`, then actually reboot something once, or accept
 that you have not tested it.
 
+**`Running` and `1/1` describe the process, not the purpose.** A management
+agent sat healthy for ninety minutes doing nothing but logging an error every
+eight seconds, because the generated manifest that deployed it had a
+placeholder left unsubstituted:
+
+```yaml
+data:
+  EDGE_ID: ""      # the console generates a UUID here; applying the template
+                   # verbatim leaves the field present, empty, and valid YAML
+```
+
+Every liveness signal was green — the process was up, the port was listening,
+the readiness probe passed — because none of them know what the container is
+*for*. An empty string is not a missing key, so nothing rejected it. Read the
+logs of the thing that claims to be fine, especially when something downstream
+of it is unexplainably broken; a component reporting its own health is
+reporting on itself, not on the job.
+
+The generalisation worth keeping: when a vendor's UI generates a manifest, the
+UI is substituting values into it. Applying the raw template from the docs
+instead skips the substitution, and the omission is usually silent.
+
 ## Verifying without touching a hosts file
 
 `curl --resolve` maps a name to an address for one request, so the proxy's
@@ -172,6 +194,44 @@ also the machine whose workloads a scheduler is entitled to move.
 
 The cost is honest: two systems to operate, two update paths, and a front door
 that must eventually route to cluster-side services as well as local ports.
+
+**Reaching a cluster service from outside: the front door is usually enough.**
+A NodePort answers on every node, but a management tool is configured with one
+address, so naming a node pins the service's availability to that node being
+powered on. The textbook fix is a virtual IP — kube-vip or keepalived — and
+that *is* the right answer for the API server on `:6443`, where clients and
+joining nodes need one endpoint that survives a control-plane node going away.
+
+For everything else, check where the client lives first. If the client already
+runs on the proxy host, routing the hop through the front door adds no failure
+domain the client does not already have, and it costs a config block instead of
+a daemon on every node and an address reserved outside the DHCP pool:
+
+```caddy
+https://<host-ip>:30778 {
+    reverse_proxy <node1>:30778 <node2>:30778 {
+        lb_policy first          # every node forwards to the same pod;
+        lb_try_duration 10s      # spreading connections buys nothing
+        health_uri /ping
+        health_interval 10s
+        transport http { tls tls_insecure_skip_verify }
+    }
+}
+```
+
+Configure the client with the **IP**, not a name. A containerised client
+resolves through the container runtime's DNS, not the host's `/etc/hosts`, so a
+hosts-file name does not exist as far as it is concerned. Add the name for
+humans, and know which of the two the machine is using.
+
+**Test the failover, do not just configure it.** Put a *blackholed* address
+first in the pool — one that drops packets, which is what a powered-off machine
+looks like, rather than one that refuses the connection, which is what a
+running machine with a stopped service looks like. Those are different failures
+and only one of them resembles the case you care about. Reload, wait out one
+health-check interval, and time a real request. Failover here measured 37 ms,
+because the active check had already evicted the dead upstream before the
+request arrived — a number worth knowing rather than assuming.
 
 **Find the nodes by probing, not from an inventory.** Assumed-consecutive
 addresses were wrong within a week of setup here — DHCP had put the nodes
